@@ -7,4 +7,5 @@ public class Override {
 	public Boolean ignore; // = false;
 	public Map<String, RegexReplace[]> regex_extracts;
 	public Map<String, String> remap;
+	public RegexReplace[] rename;
 }
