@@ -48,6 +48,7 @@ public class Yaml2Yaml {
 		opts.setAllowDuplicateKeys(true);
 		opts.setEnumCaseSensitive(true);
 		opts.setMergeDuplicates(true);
+		opts.setMaxAliasesForCollections(5000);
 		DumperOptions dopts = new DumperOptions();
 		dopts.setIndent(2);
 		dopts.setPrettyFlow(true);
@@ -70,8 +71,11 @@ public class Yaml2Yaml {
 		try {
 			fr = new FileReader(args[0]);
 			GeneratorConfig config = yaml.load(fr);
+			/*
 			String s = yaml.dump(config);
 			System.out.print(s.replaceAll("'<<':", "<<:"));
+			*/
+			System.out.println(config.toString());
 		} catch (Exception e) {
 			System.err.print(e.getLocalizedMessage());
 		} finally {
