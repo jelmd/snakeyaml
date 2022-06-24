@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 public class Module extends YamlObject {
 	public Integer max_repetitions; // = 25;
@@ -13,12 +14,24 @@ public class Module extends YamlObject {
 	public AuthParams auth;
 	public String[] walk;
 	public String prefix; // = "";
+	public String fallback_label;
 	public Lookup[] lookups;
 	public TreeMap<String, Override> overrides;
 
+	private static final Pattern isPunct = Pattern.compile(".*\\p{Punct}.*");
+	private int c = 0;
+
 	public void dump(StringBuilder sb, String indent) {
-		if (prefix != null)
-			sb.append(indent).append("prefix: ").append(prefix).append("\n\n");
+		if (prefix != null) {
+			sb.append(indent).append("prefix: ").append(prefix).append("\n");
+			c++;
+		}
+		if (fallback_label != null) {
+			sb.append(indent).append("fallback_label: ").append(fallback_label).append("\n");
+			c++;
+		}
+		if (c > 0)
+			sb.append('\n');
 		if (version != null)
 			sb.append(indent).append("version: ").append(version).append('\n');
 		if (timeout != null)
@@ -41,7 +54,13 @@ public class Module extends YamlObject {
 			sb.append('\n').append(indent).append("walk:\n");
 			indent += "  ";
 			for (int i=0; i < walk.length; i++) {
-				sb.append(indent).append("- ").append(walk[i]).append('\n');
+				sb.append(indent).append("- ");
+				if (isPunct.matcher(walk[i]).matches()) {
+					sb.append('\'').append(walk[i]).append('\'');
+				} else {
+					sb.append(walk[i]);
+				}
+				sb.append('\n');
 			}
 			indent = indent.substring(2);
 		}
@@ -67,7 +86,14 @@ public class Module extends YamlObject {
 			int cp = sb.length();
 			for (Map.Entry<String, Override> e: overrides.entrySet()) {
 				int mark2 = sb.length();
-				sb.append(indent).append(e.getKey()).append(":\n");
+				String s = e.getKey();
+				sb.append(indent);
+				if (isPunct.matcher(s).matches()) {
+					sb.append('\'').append(s).append('\'');
+				} else {
+					sb.append(s);
+				}
+				sb.append(":\n");
 				int mark3 = sb.length();
 				e.getValue().dump(sb, indent + "  ");
 				if (sb.length() == mark3)

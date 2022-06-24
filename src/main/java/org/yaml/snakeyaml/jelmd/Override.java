@@ -6,15 +6,21 @@ import java.util.TreeMap;
 public class Override extends YamlObject {
 	public String type; // = "";
 	public Boolean ignore; // = false;
+	public Boolean auto_index; // = false;
 	public TreeMap<String, RegexReplace[]> regex_extracts;
 	public TreeMap<String, String> remap;
 	public RegexReplace[] rename;
+	public String fallback_label; // = "";
 
 	public void dump(StringBuilder sb, String indent) {
 		if (ignore != null)
 			sb.append(indent).append("ignore: ").append(ignore).append('\n');
 		if (type != null)
 			sb.append(indent).append("type: ").append(type).append('\n');
+		if (fallback_label != null)
+			sb.append(indent).append("fallback_label: ").append(fallback_label).append('\n');
+		if (auto_index != null)
+			sb.append(indent).append("auto_index: ").append(auto_index).append('\n');
 		if (rename != null && rename.length != 0) {
 			int mark = sb.length();
 			sb.append(indent).append("rename:\n");

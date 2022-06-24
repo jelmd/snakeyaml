@@ -34,7 +34,7 @@ public class Lookup extends YamlObject {
 			for (int i=0; i < mprefix.length; i++) {
 				if (mprefix[i] == null || mprefix[i].length() == 0)
 					continue;
-				sb.append(mprefix[i]).append(", ");
+				sb.append('\'').append(mprefix[i]).append("', ");
 			}
 			if (sb.length() != cp) {
 				sb.setLength(sb.length() - 2);
